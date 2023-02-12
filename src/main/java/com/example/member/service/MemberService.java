@@ -56,4 +56,20 @@ public class MemberService {
         return memberDTOList;
 
     }
+
+    public MemberDTO findById(Long id) {
+        // 하나 조회할때 optional로 감싸줌
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findById(id);
+        if (optionalMemberEntity.isPresent()){
+            return MemberDTO.toMemberDTO(optionalMemberEntity.get()); // optional을 벗겨내서 entity -> dto 변환
+        }else {
+            return null;
+        }
+
+
+    }
+
+    public void deleteByid(Long id) {
+        memberRepository.deleteById(id);
+    }
 }

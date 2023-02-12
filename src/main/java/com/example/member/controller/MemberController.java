@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -61,5 +58,26 @@ public class MemberController {
         model.addAttribute("memberList", memberDTOList);
         return "list";
 
+    }
+
+    @GetMapping("/member/{id}")
+    public String findById(@PathVariable Long id, Model model) {
+        MemberDTO memberDTO = memberService.findById(id);
+        // login 처럼 return 값에 따라 분류 할 수 있음
+        model.addAttribute("member", memberDTO);
+        return "detail";
+    }
+
+    @GetMapping("/member/delete/{id}") // /member/{id}로 할 수 있도록 공부
+    public String deleteById(@PathVariable Long id){
+        memberService.deleteByid(id);
+
+        return "redirect:/member/"; // list 로 쓰면 껍데기만 보여짐
+    }
+
+    @GetMapping("/member/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "index";
     }
 }
